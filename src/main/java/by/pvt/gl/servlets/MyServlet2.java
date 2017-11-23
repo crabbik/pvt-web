@@ -12,8 +12,9 @@ public class MyServlet2 extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		resp.setStatus(302);
-		resp.addHeader("location", "https://www.tut.by");
+		// resp.setStatus(302);
+		// resp.addHeader("location", "https://www.tut.by");
+		System.out.println("Servlet 2");
 
 	}
 
