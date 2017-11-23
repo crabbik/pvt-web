@@ -20,6 +20,8 @@ public class AuthenticationFilter implements Filter {
 		users.put("user1", "pass1");
 		users.put("user2", "pass2");
 		users.put("user3", "pass3");
+		users.put("name", "qwerty");
+
 	}
 
 	@Override
@@ -30,15 +32,37 @@ public class AuthenticationFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) resp;
 
 		String authHeader = request.getHeader("Authorization");
+		if (authHeader == null) {
+			error401(response);
+			return;
+		}
+
 		String[] headerParts = authHeader.split(" ");
 		String userPasswordEncoded = headerParts[1];
 		String credentials = new String(Base64.getDecoder().decode(
 				userPasswordEncoded));
 		String[] userPassword = credentials.split(":");
+		if (userPassword == null || userPassword.length < 2) {
+			error401(response);
+			return;
+		}
 		String user = userPassword[0];
 		String password = userPassword[1];
-		System.out.println(user + " " + password);
-		// chain.doFilter(req, resp);
+
+		String expectedPassword = users.get(user);
+		if (password != null && password.equals(expectedPassword)) {
+			chain.doFilter(req, resp);
+
+		} else {
+			error401(response);
+			return;
+		}
+	}
+
+	private void error401(HttpServletResponse response) throws IOException {
+
+		response.addHeader("WWW-Authenticate", "Basic");
+		response.setStatus(401);
 
 	}
 
