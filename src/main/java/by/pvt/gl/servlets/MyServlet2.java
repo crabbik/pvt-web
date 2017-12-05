@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class MyServlet2 extends HttpServlet {
 
@@ -14,7 +15,9 @@ public class MyServlet2 extends HttpServlet {
 			throws ServletException, IOException {
 		// resp.setStatus(302);
 		// resp.addHeader("location", "https://www.tut.by");
-		System.out.println("Servlet 2");
+		HttpSession session = req.getSession();
+		resp.getWriter().print(session.getAttribute("login"));
+		// System.out.println("Servlet 2");
 
 	}
 
